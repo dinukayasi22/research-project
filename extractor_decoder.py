@@ -5,9 +5,7 @@ from dataclasses import dataclass
 
 @dataclass
 class PayloadDecoder:
-    """
-    Self-Healing Pipeline: RS Repair and AES Decryption.
-    """
+
     redundancy_ratio: float = 1.0
 
     def decode(self, robust_payload: bytes, aes_key: bytes) -> str:

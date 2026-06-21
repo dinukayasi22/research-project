@@ -7,10 +7,7 @@ from reedsolo import RSCodec
 
 @dataclass
 class PayloadEncoder:
-    """
-    Phase 2: Preparation Pipeline
-    Applies AES-256 CBC encryption and Reed-Solomon Error Correction.
-    """
+
     redundancy_ratio: float = 1.0 # 100% Redundancy for extreme survival
 
     def encode(self, plaintext: str, aes_key: bytes) -> bytes:

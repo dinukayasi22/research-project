@@ -65,7 +65,7 @@ class ImagePanel(ctk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
 
         self.title_label = ctk.CTkLabel(
-            self, text=title, font=ctk.CTkFont(size=14, weight="bold"), text_color="#E2E8F0"
+            self, text=title, font=ctk.CTkFont(family="Roboto", size=14, weight="bold"), text_color="#E2E8F0"
         )
         self.title_label.grid(row=0, column=0, sticky="w", padx=14, pady=(12, 4))
 
@@ -76,7 +76,7 @@ class ImagePanel(ctk.CTkFrame):
         self.image_label.grid(row=1, column=0, padx=14, pady=4, sticky="nsew")
 
         self.caption_label = ctk.CTkLabel(
-            self, text="Awaiting run...", font=ctk.CTkFont(size=12), text_color=MUTED
+            self, text="Awaiting run...", font=ctk.CTkFont(family="Roboto", size=12), text_color=MUTED
         )
         self.caption_label.grid(row=2, column=0, sticky="w", padx=14, pady=(4, 12))
 
@@ -104,11 +104,11 @@ class MetricCard(ctk.CTkFrame):
         super().__init__(master, corner_radius=10, fg_color="#1E2433")
         self.grid_columnconfigure(0, weight=1)
         self.label_widget = ctk.CTkLabel(
-            self, text=label, font=ctk.CTkFont(size=12), text_color=MUTED
+            self, text=label, font=ctk.CTkFont(family="Roboto", size=12), text_color=MUTED
         )
         self.label_widget.grid(row=0, column=0, padx=16, pady=(12, 0), sticky="w")
         self.value_widget = ctk.CTkLabel(
-            self, text="—", font=ctk.CTkFont(size=22, weight="bold"), text_color="#E2E8F0"
+            self, text="—", font=ctk.CTkFont(family="Roboto", size=22, weight="bold"), text_color="#E2E8F0"
         )
         self.value_widget.grid(row=1, column=0, padx=16, pady=(0, 12), sticky="w")
 
@@ -146,15 +146,10 @@ class StegoApp(ctk.CTk):
         sidebar.grid_rowconfigure(20, weight=1)
 
         header = ctk.CTkLabel(
-            sidebar, text="DWT-SVD STEGO", font=ctk.CTkFont(size=20, weight="bold"),
+            sidebar, text="Content-Adaptive Hybrid DWT-SVD", font=ctk.CTkFont(family="Roboto", size=20, weight="bold"),
             text_color="#FFFFFF"
         )
-        header.grid(row=0, column=0, padx=22, pady=(26, 0), sticky="w")
-        sub = ctk.CTkLabel(
-            sidebar, text="Adaptive Hybrid Framework · Group 21", font=ctk.CTkFont(size=12),
-            text_color=MUTED
-        )
-        sub.grid(row=1, column=0, padx=22, pady=(2, 22), sticky="w")
+        header.grid(row=0, column=0, padx=22, pady=(26, 22), sticky="w")
 
         # --- Payload section ---
         self._section_label(sidebar, "SECRET PAYLOAD", row=2)
@@ -167,25 +162,25 @@ class StegoApp(ctk.CTk):
         # --- Embedding section ---
         self._section_label(sidebar, "EMBEDDING STRENGTH", row=5)
         self.alpha_value_label = ctk.CTkLabel(sidebar, text="Alpha: Adaptive (entropy-linked)",
-                                               font=ctk.CTkFont(size=11), text_color=MUTED)
+                                               font=ctk.CTkFont(family="Roboto", size=11), text_color=MUTED)
         self.alpha_value_label.grid(row=6, column=0, padx=22, pady=(6, 16), sticky="w")
 
         # --- Attack section ---
         self._section_label(sidebar, "LOSSY CHANNEL ATTACK", row=9)
-        self.qf_slider = ctk.CTkSlider(sidebar, from_=10, to=95, number_of_steps=85,
+        self.qf_slider = ctk.CTkSlider(sidebar, from_=50, to=100, number_of_steps=50,
                                         command=self._on_qf_slider)
         self.qf_slider.set(50)
         self.qf_slider.grid(row=10, column=0, padx=22, pady=(6, 2), sticky="ew")
         self.qf_label = ctk.CTkLabel(sidebar, text="JPEG Quality Factor: 50",
-                                      font=ctk.CTkFont(size=11), text_color=MUTED)
+                                      font=ctk.CTkFont(family="Roboto", size=11), text_color=MUTED)
         self.qf_label.grid(row=11, column=0, padx=22, pady=(0, 10), sticky="w")
 
-        self.scale_slider = ctk.CTkSlider(sidebar, from_=0.3, to=1.0, number_of_steps=70,
+        self.scale_slider = ctk.CTkSlider(sidebar, from_=0.5, to=1.0, number_of_steps=50,
                                            command=self._on_scale_slider)
         self.scale_slider.set(1.0)
         self.scale_slider.grid(row=12, column=0, padx=22, pady=(2, 2), sticky="ew")
         self.scale_label = ctk.CTkLabel(sidebar, text="Geometric Scale: 100% (disabled)",
-                                         font=ctk.CTkFont(size=11), text_color=MUTED)
+                                         font=ctk.CTkFont(family="Roboto", size=11), text_color=MUTED)
         self.scale_label.grid(row=13, column=0, padx=22, pady=(0, 18), sticky="w")
 
         # --- Spread / RS section ---
@@ -195,27 +190,23 @@ class StegoApp(ctk.CTk):
         self.spread_slider.set(8)
         self.spread_slider.grid(row=15, column=0, padx=22, pady=(6, 2), sticky="ew")
         self.spread_label = ctk.CTkLabel(sidebar, text="Spread-Spectrum Redundancy: 8x",
-                                          font=ctk.CTkFont(size=11), text_color=MUTED)
+                                          font=ctk.CTkFont(family="Roboto", size=11), text_color=MUTED)
         self.spread_label.grid(row=16, column=0, padx=22, pady=(0, 18), sticky="w")
 
         # --- Run button ---
         self.run_btn = ctk.CTkButton(
-            sidebar, text="RUN FULL PIPELINE", height=44,
-            font=ctk.CTkFont(size=14, weight="bold"), fg_color=ACCENT, hover_color="#2563EB",
+            sidebar, text="RUN", height=44,
+            font=ctk.CTkFont(family="Roboto", size=14, weight="bold"), fg_color=ACCENT, hover_color="#2563EB",
             command=self._on_run_clicked
         )
         self.run_btn.grid(row=17, column=0, padx=22, pady=(8, 6), sticky="ew")
 
-        self.progress_bar = ctk.CTkProgressBar(sidebar, mode="indeterminate")
-        self.progress_bar.grid(row=18, column=0, padx=22, pady=(2, 6), sticky="ew")
-        self.progress_bar.set(0)
-
-        self.status_label = ctk.CTkLabel(sidebar, text="Idle", font=ctk.CTkFont(size=11),
+        self.status_label = ctk.CTkLabel(sidebar, text="Idle", font=ctk.CTkFont(family="Roboto", size=11),
                                           text_color=MUTED)
-        self.status_label.grid(row=19, column=0, padx=22, pady=(0, 10), sticky="w")
+        self.status_label.grid(row=18, column=0, padx=22, pady=(0, 10), sticky="w")
 
     def _section_label(self, parent, text, row):
-        lbl = ctk.CTkLabel(parent, text=text, font=ctk.CTkFont(size=11, weight="bold"),
+        lbl = ctk.CTkLabel(parent, text=text, font=ctk.CTkFont(family="Roboto", size=11, weight="bold"),
                             text_color=ACCENT)
         lbl.grid(row=row, column=0, padx=22, pady=(4, 0), sticky="w")
 
@@ -229,7 +220,7 @@ class StegoApp(ctk.CTk):
         main.grid_rowconfigure(3, weight=1)
 
         title = ctk.CTkLabel(main, text="Pipeline Visualization",
-                              font=ctk.CTkFont(size=18, weight="bold"), text_color="#E2E8F0")
+                              font=ctk.CTkFont(family="Roboto", size=18, weight="bold"), text_color="#E2E8F0")
         title.grid(row=0, column=0, columnspan=3, padx=26, pady=(22, 12), sticky="w")
 
         # Image panels
@@ -266,7 +257,7 @@ class StegoApp(ctk.CTk):
         log_frame.grid_columnconfigure(0, weight=1)
 
         log_title = ctk.CTkLabel(log_frame, text="Execution Log",
-                                  font=ctk.CTkFont(size=13, weight="bold"), text_color="#E2E8F0")
+                                  font=ctk.CTkFont(family="Roboto", size=13, weight="bold"), text_color="#E2E8F0")
         log_title.grid(row=0, column=0, padx=14, pady=(10, 4), sticky="w")
 
         self.log_box = ctk.CTkTextbox(log_frame, font=ctk.CTkFont(family="Consolas", size=12),
@@ -316,7 +307,6 @@ class StegoApp(ctk.CTk):
 
         self._is_running = True
         self.run_btn.configure(state="disabled", text="RUNNING...")
-        self.progress_bar.start()
         self.set_status("Running pipeline...", ACCENT)
         self.log_box.configure(state="normal")
         self.log_box.delete("1.0", "end")
@@ -332,9 +322,7 @@ class StegoApp(ctk.CTk):
 
     def _finish_run(self, success_color):
         self._is_running = False
-        self.progress_bar.stop()
-        self.progress_bar.set(1 if success_color == SUCCESS else 0)
-        self.run_btn.configure(state="normal", text="RUN FULL PIPELINE")
+        self.run_btn.configure(state="normal", text="RUN")
         self.set_status("Idle", MUTED)
 
     def _run_pipeline_worker(self):
@@ -348,14 +336,9 @@ class StegoApp(ctk.CTk):
             aes_key = hashlib.sha256(user_key.encode("utf-8")).digest()
 
             spread = int(self.spread_slider.get())
-            rs_ratio = 1.0
+            rs_ratio = 0.3
             qf = int(self.qf_slider.get())
             scale = round(float(self.scale_slider.get()), 2)
-
-            self.log("=" * 60)
-            self.log("ADAPTIVE HYBRID DWT-SVD STEGANOGRAPHY — PIPELINE START")
-            self.log("=" * 60)
-            self.log(f"Secret message length: {len(secret_message)} chars")
 
             # Phase 1
             valid_images = [f for f in os.listdir(COVERS_DIR) if f.lower().endswith((".jpg", ".png"))]

@@ -21,7 +21,7 @@ def unscramble_array(arr, seed=42):
     return res
 
 class DWTSVDEmbedder:
-    """Phase 3: DWT-SVD Embedding. Optimizing for Methodology Compliance with Interleaving."""
+
     def __init__(self, alpha: float = 30.0, redundancy: int = 5):
         self.alpha = alpha
         self.redundancy = redundancy

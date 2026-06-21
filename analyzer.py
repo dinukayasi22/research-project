@@ -6,9 +6,7 @@ import shutil
 from typing import Union, Dict, List
 
 def calculate_shannon_entropy(image_input: Union[str, np.ndarray], threshold: float = 7.7) -> Dict[str, Union[bool, float]]:
-    """
-    Analyzes an image to determine its suitability for steganography based on Shannon Entropy.
-    """
+
     # 1. Read and validate the image
     if isinstance(image_input, str):
         img = cv2.imread(image_input)
@@ -48,9 +46,7 @@ def calculate_shannon_entropy(image_input: Union[str, np.ndarray], threshold: fl
     }
 
 def process_directory(source_dir: str, target_dir: str, threshold: float = 7.7):
-    """
-    Scans a directory for images, analyzes them, and copies suitable ones to target_dir.
-    """
+
     # Ensure target directory exists
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
@@ -87,14 +83,14 @@ def process_directory(source_dir: str, target_dir: str, threshold: float = 7.7):
         except Exception as e:
             print(f"Error processing {filename}: {e}")
 
-    print("\n" + "="*30)
+
     print("ANALYSIS SUMMARY")
-    print("="*30)
+
     print(f"Total Images Scanned: {total_files}")
     print(f"Suitable Images Found: {suitable_count}")
     print(f"Unsuitable Images: {total_files - suitable_count}")
     print(f"Target Directory: {os.path.abspath(target_dir)}")
-    print("="*30)
+
 
 if __name__ == "__main__":
 
