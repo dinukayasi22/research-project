@@ -185,13 +185,9 @@ class StegoApp(ctk.CTk):
 
         # --- Spread / RS section ---
         self._section_label(sidebar, "ROBUSTNESS LAYER", row=14)
-        self.spread_slider = ctk.CTkSlider(sidebar, from_=2, to=15, number_of_steps=13,
-                                            command=self._on_spread_slider)
-        self.spread_slider.set(8)
-        self.spread_slider.grid(row=15, column=0, padx=22, pady=(6, 2), sticky="ew")
-        self.spread_label = ctk.CTkLabel(sidebar, text="Spread-Spectrum Redundancy: 8x",
+        self.spread_label = ctk.CTkLabel(sidebar, text="Spread-Spectrum Redundancy: 8x (fixed)",
                                           font=ctk.CTkFont(family="Roboto", size=11), text_color=MUTED)
-        self.spread_label.grid(row=16, column=0, padx=22, pady=(0, 18), sticky="w")
+        self.spread_label.grid(row=15, column=0, padx=22, pady=(6, 18), sticky="w")
 
         # --- Run button ---
         self.run_btn = ctk.CTkButton(
@@ -277,10 +273,6 @@ class StegoApp(ctk.CTk):
         suffix = "(disabled)" if pct >= 99.5 else ""
         self.scale_label.configure(text=f"Geometric Scale: {pct:.0f}% {suffix}")
 
-    def _on_spread_slider(self, value):
-        self.spread_label.configure(text=f"Spread-Spectrum Redundancy: {int(float(value))}x")
-
-
     # Logging helpers (thread-safe via .after)
 
     def log(self, text):
@@ -335,7 +327,7 @@ class StegoApp(ctk.CTk):
             secret_message = user_msg
             aes_key = hashlib.sha256(user_key.encode("utf-8")).digest()
 
-            spread = int(self.spread_slider.get())
+            spread = 8  
             rs_ratio = 0.3
             qf = int(self.qf_slider.get())
             scale = round(float(self.scale_slider.get()), 2)
