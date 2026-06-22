@@ -6,7 +6,7 @@ from dataclasses import dataclass
 @dataclass
 class PayloadDecoder:
 
-    redundancy_ratio: float = 1.0
+    redundancy_ratio: float = 0.3  # 30% Reed-Solomon parity — must match the encoder
 
     def decode(self, robust_payload: bytes, aes_key: bytes) -> str:
         # 1. Determine parity

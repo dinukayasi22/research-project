@@ -8,7 +8,7 @@ from reedsolo import RSCodec
 @dataclass
 class PayloadEncoder:
 
-    redundancy_ratio: float = 1.0 # 100% Redundancy for extreme survival
+    redundancy_ratio: float = 0.3  # 30% Reed-Solomon parity — must match the decoder
 
     def encode(self, plaintext: str, aes_key: bytes) -> bytes:
         # AES Encryption

@@ -5,7 +5,7 @@ import os
 import shutil
 from typing import Union, Dict, List
 
-def calculate_shannon_entropy(image_input: Union[str, np.ndarray], threshold: float = 7.7) -> Dict[str, Union[bool, float]]:
+def calculate_shannon_entropy(image_input: Union[str, np.ndarray], threshold: float = 7.3) -> Dict[str, Union[bool, float]]:
 
     # 1. Read and validate the image
     if isinstance(image_input, str):
@@ -45,7 +45,7 @@ def calculate_shannon_entropy(image_input: Union[str, np.ndarray], threshold: fl
         'entropy_value': float(entropy)
     }
 
-def process_directory(source_dir: str, target_dir: str, threshold: float = 7.7):
+def process_directory(source_dir: str, target_dir: str, threshold: float = 7.3):
 
     # Ensure target directory exists
     if not os.path.exists(target_dir):
@@ -96,7 +96,7 @@ if __name__ == "__main__":
 
     SOURCE_FOLDER = "ALASKA_V2"
     TARGET_FOLDER = "suitable_covers"
-    THRESHOLD = 7.7 # You can lower this to 6.8 if you want more images
+    THRESHOLD = 7.3 # You can lower this to 6.8 if you want more images
     
     # Run batch process
     if os.path.exists(SOURCE_FOLDER):
