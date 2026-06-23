@@ -9,7 +9,8 @@ import cv2
 import numpy as np
 import customtkinter as ctk
 
-from gui_app import ImagePanel, bytes_to_bits, bits_to_bytes, ACCENT, SUCCESS, DANGER, MUTED
+from app import (ImagePanel, bytes_to_bits, bits_to_bytes, standardize_cover, COVER_SIZE,
+                 ACCENT, SUCCESS, DANGER, MUTED)
 from phase2_payload import PayloadEncoder
 from phase3_embedding import DWTSVDExtractor
 from extractor_decoder import PayloadDecoder
@@ -30,7 +31,9 @@ def alpha_for_entropy(entropy_val):
     return 45.0
 
 
-TOTAL_SLOTS = 4096  # 512x512 cover -> LH band 256x256 -> 64x64 4x4 blocks
+def total_slots_for(img):
+    h, w = img.shape[:2]
+    return (h // 2 // 4) * (w // 2 // 4)
 
 
 def probe_payload_bit_length(message_char_length, rs_ratio=RS_RATIO):
@@ -42,8 +45,7 @@ def probe_payload_bit_length(message_char_length, rs_ratio=RS_RATIO):
     return len(probe_bytes) * 8
 
 
-def candidate_payload_bit_lengths(rs_ratio=RS_RATIO, spread=SPREAD, total_slots=TOTAL_SLOTS):
-
+def candidate_payload_bit_lengths(total_slots, rs_ratio=RS_RATIO, spread=SPREAD):
     lengths = []
     char_len = 1
     while True:
@@ -195,8 +197,8 @@ class DecoderApp(ctk.CTk):
             self.file_label.configure(text="Could not read that file as an image.", text_color=DANGER)
             return
 
-        if img.shape[0] != 512 or img.shape[1] != 512:
-            img = cv2.resize(img, (512, 512), interpolation=cv2.INTER_AREA)
+        # Normalize to the same working resolution the sender used (shared helper).
+        img = standardize_cover(img)
 
         self.loaded_image = img
         self.loaded_image_path = path
@@ -247,7 +249,7 @@ class DecoderApp(ctk.CTk):
 
             # Try every payload length that could physically fit and keep whichever
             # one decodes cleanly. A wrong length fails RS/AES, so it self-validates.
-            candidates = candidate_payload_bit_lengths()
+            candidates = candidate_payload_bit_lengths(total_slots_for(img))
             self.log(f"Auto-detecting across {len(candidates)} "
                       f"possible payload size(s): {candidates} bits")
 

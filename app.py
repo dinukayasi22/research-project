@@ -24,6 +24,12 @@ COVERS_DIR = "suitable_covers"
 STEGO_DIR = "stego_images"
 ATTACK_DIR = "attacked_images"
 
+
+#   COVER_SIZE = 512  -> resize every cover to 512x512.
+#   COVER_SIZE = None -> embed at the image's NATIVE resolution.
+
+COVER_SIZE = None
+
 THUMB_SIZE = (340, 340)
 
 ACCENT = "#3B82F6"
@@ -47,6 +53,13 @@ def bits_to_bytes(bits):
         byte_val = int("".join(map(str, bits[i:i + 8])), 2)
         byte_list.append(byte_val)
     return bytes(byte_list)
+
+
+def standardize_cover(img):
+    if COVER_SIZE is not None:
+        return cv2.resize(img, (COVER_SIZE, COVER_SIZE), interpolation=cv2.INTER_AREA)
+    h, w = img.shape[:2]
+    return img[:h - h % 2, :w - w % 2]
 
 
 def cv2_to_ctk_image(cv_img, size=THUMB_SIZE):
@@ -153,7 +166,7 @@ class StegoApp(ctk.CTk):
 
         # --- Payload section ---
         self._section_label(sidebar, "SECRET PAYLOAD", row=2)
-        self.msg_entry = ctk.CTkEntry(sidebar, placeholder_text="Secret message (max 15 chars)")
+        self.msg_entry = ctk.CTkEntry(sidebar, placeholder_text="Secret message")
         self.msg_entry.grid(row=3, column=0, padx=22, pady=(6, 10), sticky="ew")
 
         self.pwd_entry = ctk.CTkEntry(sidebar, placeholder_text="Encryption password", show="•")
@@ -179,15 +192,10 @@ class StegoApp(ctk.CTk):
                                            command=self._on_scale_slider)
         self.scale_slider.set(1.0)
         self.scale_slider.grid(row=12, column=0, padx=22, pady=(2, 2), sticky="ew")
-        self.scale_label = ctk.CTkLabel(sidebar, text="Geometric Scale: 100% (disabled)",
+        self.scale_label = ctk.CTkLabel(sidebar, text="Geometric Scale: 100% (default)",
                                          font=ctk.CTkFont(family="Roboto", size=11), text_color=MUTED)
         self.scale_label.grid(row=13, column=0, padx=22, pady=(0, 18), sticky="w")
 
-        # --- Spread / RS section ---
-        self._section_label(sidebar, "ROBUSTNESS LAYER", row=14)
-        self.spread_label = ctk.CTkLabel(sidebar, text="Spread-Spectrum Redundancy: 8x (fixed)",
-                                          font=ctk.CTkFont(family="Roboto", size=11), text_color=MUTED)
-        self.spread_label.grid(row=15, column=0, padx=22, pady=(6, 18), sticky="w")
 
         # --- Run button ---
         self.run_btn = ctk.CTkButton(
@@ -322,7 +330,7 @@ class StegoApp(ctk.CTk):
             os.makedirs(STEGO_DIR, exist_ok=True)
             os.makedirs(ATTACK_DIR, exist_ok=True)
 
-            user_msg = self.msg_entry.get().strip() or "somethingishere"
+            user_msg = self.msg_entry.get().strip() or "Something is hidden here"
             user_key = self.pwd_entry.get().strip() or "batman123"
             secret_message = user_msg
             aes_key = hashlib.sha256(user_key.encode("utf-8")).digest()
@@ -341,9 +349,10 @@ class StegoApp(ctk.CTk):
 
             target_image_name = random.choice(valid_images)
             cover_img = cv2.imread(os.path.join(COVERS_DIR, target_image_name))
-            cover_img = cv2.resize(cover_img, (512, 512), interpolation=cv2.INTER_AREA)
+            cover_img = standardize_cover(cover_img)
+            ch, cw = cover_img.shape[:2]
             self.after(0, lambda: self.cover_panel.set_image(cover_img))
-            self.after(0, lambda: self.cover_panel.set_caption(f"{target_image_name} · 512×512"))
+            self.after(0, lambda: self.cover_panel.set_caption(f"{target_image_name} · {cw}×{ch}"))
 
             entropy_result = calculate_shannon_entropy(cover_img)
             entropy_val = entropy_result["entropy_value"]
